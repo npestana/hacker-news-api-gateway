@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -72,7 +73,8 @@ namespace Api.Infrastructure.Repository
                     Title = item.Title,
                     Uri = item.Url,
                     PostedBy = item.Author,
-                    Time = item.Time.ToString(),
+                    Time = DateTimeOffset.FromUnixTimeSeconds(item.Time)
+                        .ToString(_configuration["DateTimeFormat"], CultureInfo.CurrentCulture),
                     Score = item.Score,
                     CommentCount = item.Comments?.Count ?? 0
                 });
