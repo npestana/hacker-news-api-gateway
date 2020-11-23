@@ -16,20 +16,16 @@ namespace Api.Infrastructure.Repository
     /// </summary>
     public class CachedHackerNewsRepository : ICachedHackerNewsRepository
     {
-        private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
         private readonly IHackerNewsRepository _hackerNewsRepository;
 
         /// <summary>
         /// Cached Hacker News Repository constructor used to Dependency Injection.
         /// </summary>
-        /// <param name="configuration">Logger instance.</param>
         /// <param name="memoryCache">Memory Cache instance to save the Best Stories.</param>
         /// <param name="hackerNewsRepository">Hacker News Repository instance to requests the data.</param>
-        public CachedHackerNewsRepository(IConfiguration configuration, IMemoryCache memoryCache,
-            IHackerNewsRepository hackerNewsRepository)
+        public CachedHackerNewsRepository(IMemoryCache memoryCache, IHackerNewsRepository hackerNewsRepository)
         {
-            _configuration = configuration;
             _memoryCache = memoryCache;
             _hackerNewsRepository = hackerNewsRepository;
         }

@@ -44,8 +44,12 @@ namespace Api.Infrastructure.Repository
         public async Task<List<Story>> GetBestStories()
         {
             var bestStoriesIds = await GetBestStoriesIds();
+            if (bestStoriesIds == null)
+            {
+                return null;
+            }
+            
             var storiesIds = bestStoriesIds as int[] ?? bestStoriesIds.ToArray();
-
             if (storiesIds.Length == 0)
             {
                 return null;
@@ -107,7 +111,17 @@ namespace Api.Infrastructure.Repository
             }
 
             await using var responseStream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<IEnumerable<int>>(responseStream);
+
+            try
+            {
+                return await JsonSerializer.DeserializeAsync<IEnumerable<int>>(responseStream);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, "Can't deserialize the Best Stories list.");
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -134,9 +148,19 @@ namespace Api.Infrastructure.Repository
             {
                 return null;
             }
-            
+
             await using var responseStream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<HackerNewsStoryDto>(responseStream);
+
+            try
+            {
+                return await JsonSerializer.DeserializeAsync<HackerNewsStoryDto>(responseStream);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical(exception, $"Can't deserialize the Story {storyId} details.");
+            }
+
+            return null;
         }
 
         /// <summary>
