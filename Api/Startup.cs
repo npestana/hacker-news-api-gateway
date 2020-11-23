@@ -1,5 +1,8 @@
 using Api.Domain.Interfaces;
 using Api.Infrastructure.Repository;
+using Api.Infrastructure.Repository.Interfaces;
+using Api.Interfaces;
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -24,8 +27,9 @@ namespace Api
         {
             services.AddHttpClient();
             services.AddSingleton<IMemoryCache, MemoryCache>();
-            services.AddScoped<IHackerNewsRepository, HackerNewsApiRepository>();
-            services.AddScoped<ICachedHackerNewsRepository, CachedHackerNewsRepository>();
+            services.AddTransient<IHackerNewsRepository, HackerNewsApiRepository>();
+            services.AddTransient<ICachedHackerNewsRepository, CachedHackerNewsRepository>();
+            services.AddSingleton<IHackerNewsApiServiceWorker, HackerNewsApiServiceWorker>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

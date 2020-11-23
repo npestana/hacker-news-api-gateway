@@ -1,5 +1,8 @@
 ﻿namespace Api.Domain.Model
 {
+    /// <summary>
+    /// Hacker News Story class.
+    /// </summary>
     public class Story
     {
         public string Title { get; set; }

@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Api.Infrastructure.Repository.Dto
 {
+    /// <summary>
+    /// Hacker News Story Dto used to parse the API data.
+    /// </summary>
     public class HackerNewsStoryDto
     {
         [JsonPropertyName("by")]

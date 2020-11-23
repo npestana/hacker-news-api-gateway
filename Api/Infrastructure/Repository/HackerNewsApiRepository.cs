@@ -12,12 +12,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Api.Infrastructure.Repository
 {
+    /// <summary>
+    /// Main Hacker News Repository.
+    /// Uses HttpClient to request the data from the official Hacker News API.
+    /// </summary>
     public class HackerNewsApiRepository : IHackerNewsRepository
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<HackerNewsApiRepository> _logger;
 
+        /// <summary>
+        /// Hacker News Repository constructor used for Dependency Injection.
+        /// </summary>
+        /// <param name="configuration">Configuration instance.</param>
+        /// <param name="clientFactory">HTTP Client Factory to make HTTP Requests.</param>
+        /// <param name="logger">Logger instance.</param>
         public HackerNewsApiRepository(IConfiguration configuration, IHttpClientFactory clientFactory,
             ILogger<HackerNewsApiRepository> logger)
         {
@@ -26,6 +36,11 @@ namespace Api.Infrastructure.Repository
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get the Hacker News Best Stories.
+        /// Maps the data from <see cref="HackerNewsStoryDto"/> objects to <see cref="Story"/> objects.
+        /// </summary>
+        /// <returns>Returns a Task with the Best Stories.</returns>
         public async Task<List<Story>> GetBestStories()
         {
             var bestStoriesIds = await GetBestStoriesIds();
@@ -67,6 +82,10 @@ namespace Api.Infrastructure.Repository
             return list.Count > 0 ? list : null;
         }
 
+        /// <summary>
+        /// Get Hacker News Best Stories using a <see cref="HttpClient"/>.
+        /// </summary>
+        /// <returns>Returns a Task with the ID list of the Best Stories.</returns>
         private async Task<IEnumerable<int>> GetBestStoriesIds()
         {
             HttpResponseMessage response;
@@ -91,6 +110,10 @@ namespace Api.Infrastructure.Repository
             return await JsonSerializer.DeserializeAsync<IEnumerable<int>>(responseStream);
         }
 
+        /// <summary>
+        /// Get Hacker News Story details using a <see cref="HttpClient"/>.
+        /// </summary>
+        /// <returns>Returns a Task with the Story details using <see cref="HackerNewsStoryDto"/>.</returns>
         private async Task<HackerNewsStoryDto> GetBestStory(int storyId)
         {
             HttpResponseMessage response;
@@ -116,6 +139,11 @@ namespace Api.Infrastructure.Repository
             return await JsonSerializer.DeserializeAsync<HackerNewsStoryDto>(responseStream);
         }
 
+        /// <summary>
+        /// Create a HTTP Request Message.
+        /// </summary>
+        /// <param name="url">Url for the HTTP request.</param>
+        /// <returns>Returns a HTTP Request Message with the custom headers.</returns>
         private HttpRequestMessage CreateRequest(string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
